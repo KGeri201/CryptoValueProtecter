@@ -1,3 +1,5 @@
+<img src="CryptoValueProtecter.svg" alt="Crypto Value Protecter" height="200"/>  
+
 # CVP
 **C**rypto **V**alue **P**rotecter
 
