@@ -4,5 +4,5 @@ __pycache__/
 
 *.yaml
 *.yml
-config.yml
-config.yaml
+
+*.log
