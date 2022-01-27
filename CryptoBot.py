@@ -1,17 +1,88 @@
 import yaml
+import logging
 from binance.client import Client
 
-def main(config = None):
-    #client = Client(config["api_key_test"], config["api_secret_test"], testnet=True)
-    client = Client(config["api_key"], config["api_secret"])
-    all_coins = client.get_all_tickers()
-    for item in all_coins:
-        print(item["symbol"]+": "+str(float(item["price"])))
-    print(all_coins)
-    #client.get_historical_klines("BTCBUSD", "1m",start,end)
+api_key = None
+api_secret = None
 
+currency = "EUR"
+logging_level = 3
+sell_threshold = 0
+trade_threshold = 0
+doomsdaymeasures = False
+
+def getBalance(info, all_coins=None):
+    balance = []
+    for item in info["balances"]:
+        if float(item["free"]) > 0 and float(item["free"]) > float(item["locked"]):
+        #    if all_coins is not None:
+        #        item.update({"value": None})
+        #        for coin in all_coins:
+        #            if coin["symbol"].find(item["asset"]+currency) != -1:
+        #                item["value"] = float(item["free"]) * float(coin["price"])
+            balance.append(item)
+    return balance
+
+def findBestPriceChangePercentage(client):
+    all_tickers = client.get_ticker()
+    highest_ticker = all_tickers[0]
+    for ticker in all_tickers:
+        if ticker["symbol"].find(currency) != -1:
+            if float(highest_ticker["priceChangePercent"]) < float(ticker["priceChangePercent"]):
+                highest_ticker = ticker
+    return highest_ticker
+
+def trade(client, asset):
+    best_asset = findBestPriceChangePercentage(client)
+    if float(best_asset["priceChangePercent"]) < sell_threshold:
+        pass
+    else:
+        print(best_asset)
+
+def main():
+    #client = Client(api_key, api_secret, testnet=True)
+    client = Client(api_key, api_secret)
+    #order = client.order_market_sell(
+    #symbol='ETHEUR')
+    #print(order)
+    assets = getBalance(client.get_account())
+    for asset in assets:
+        print(asset)
+        order = client.create_test_order(
+            symbol=asset["asset"]+currency,
+            side="SELL",
+            type="MARKET",
+            quantity=asset["free"])
+        print(order)
+        try:
+            ticker = client.get_ticker(symbol=(asset["asset"]+currency))
+            print(str(float(ticker["priceChangePercent"]))+" %")
+            if float(ticker["priceChangePercent"]) < trade_threshold:
+                trade(client, asset)
+        except:
+            pass
+
+ 
 if __name__ == "__main__":
+    logging.basicConfig(filename = "cryptobot.log",
+                        filemode = "a",
+                        format = "%(levelname)s %(asctime)s - %(message)s", 
+                        level = logging_level * 10)
+    logger = logging.getLogger()
     try:
-        main(yaml.load(open(r'config.yaml'), Loader=yaml.FullLoader))
+        config = yaml.load(open(r'config.yaml'), Loader=yaml.FullLoader)
+        api_key = config["api_key"]
+        api_secret = config["api_secret"]
+        #api_key = config["api_key_test"]
+        #api_secret = config["api_secret_test"]
     except:
+        pass
+    try:
+        if api_key is None or api_secret is None:
+            raise Exception("api_key or api_secret is not set")
+        main()
+    except Exception as e:
+        logger.error(e)
+        print(e)
+    finally:
         pass
