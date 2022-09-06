@@ -9,14 +9,18 @@
 ## Installation
 
 ### Docker
-#### Quick install with docker run, but without a webui
+#### Easy and fast
+Quick install with docker run, but without a webui.
 ```
 docker run -it --rm --name cryptobot -v "$PWD":/usr/src/app -w /usr/src/app python:3 python CryptoBot.py
 ```
-
-#### Building custom container from source
+#### Custom container
+Build the container.
 ```
 docker build -t cryptobot .
+```
+Start the container.
+```
 docker run -it --rm --name cryptobot cryptobot
 ```
 
