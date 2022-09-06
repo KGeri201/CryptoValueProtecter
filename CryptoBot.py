@@ -40,8 +40,8 @@ def trade(client, asset):
         print(best_asset)
 
 def main():
-    #client = Client(api_key, api_secret, testnet=True)
-    client = Client(api_key, api_secret)
+    client = Client(api_key, api_secret, testnet=True)
+    #client = Client(api_key, api_secret)
     #order = client.order_market_sell(
     #symbol='ETHEUR')
     #print(order)
@@ -71,10 +71,10 @@ if __name__ == "__main__":
     logger = logging.getLogger()
     try:
         config = yaml.load(open(r'config.yaml'), Loader=yaml.FullLoader)
-        api_key = config["api_key"]
-        api_secret = config["api_secret"]
-        #api_key = config["api_key_test"]
-        #api_secret = config["api_secret_test"]
+        #api_key = config["api_key"]
+        #api_secret = config["api_secret"]
+        api_key = config["api_key_test"]
+        api_secret = config["api_secret_test"]
     except:
         pass
     try:
