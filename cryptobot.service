@@ -1,0 +1,8 @@
+[Unit]
+Description=CryptoValueProtecter
+
+[Service]
+ExecStart=python CryptoBot.py
+
+[Install]
+WantedBy=multi-user.target
