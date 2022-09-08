@@ -62,7 +62,7 @@ services:
     cryptobot:
         build: .
         container_name: cryptobot
-        command: python3 ./CryptoBot.py
+        command: python3 CryptoBot.py
         restart: always
         ports:
             - 80:80
