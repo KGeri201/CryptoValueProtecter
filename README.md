@@ -55,7 +55,7 @@ docker run -it --rm --name cryptobot -v "$PWD":/usr/src/app -w /usr/src/app pyth
 ```
 #### Custom container
 ##### Use docker-compose
-Create a docker-compose.yaml in the main directory of the project
+docker-compose.yaml in the main directory of the project:
 ```
 version: '3.3'
 services:
@@ -67,11 +67,11 @@ services:
         ports:
             - 80:80
         volumes:
-            - "$PWD":/usr/src/app
+            - $PWD:/usr/src/app
         working_dir: 
             - /usr/src/app
 ```
-Bring up the container by executing:
+Start the bot by bringing up the container by executing:
 ```
 docker-compose up -d
 ```

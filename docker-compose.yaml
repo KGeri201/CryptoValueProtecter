@@ -8,6 +8,6 @@ services:
         ports:
             - 80:80
         volumes:
-            - "$PWD":/usr/src/app
+            - $PWD:/usr/src/app
         working_dir: 
             - /usr/src/app
