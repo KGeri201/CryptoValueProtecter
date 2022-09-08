@@ -70,7 +70,6 @@ services:
             - "$PWD":/usr/src/app
         working_dir: 
             - /usr/src/app
-        image: python:latest
 ```
 Bring up the container by executing:
 ```
