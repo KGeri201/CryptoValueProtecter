@@ -10,7 +10,28 @@ when their price change percentage changes under a custom threshold.
 It will also have an easy to read web UI to easily monitor the bot from everywhere.
 
 ## Installation
-Clone/copy the project. Then choose one of the two methods:
+Clone/copy the project. 
+Create a file called config.yaml in the main directory of the project.
+```
+api_key: "<API_KEY>"
+api_secret: "<API_SECRET>"
+
+currency: "EUR"
+
+time_to_wait: 24
+time_unit: "second"
+
+sell_threshold: 0
+trade_threshold: 0
+
+doomsdaymeasures: False
+
+start_website: False
+
+logging_level: 3
+debug: False
+```
+Then choose one of the two methods:
 ### Bare metal
 Go into the main directory of the project and execute the setup script
 ```
