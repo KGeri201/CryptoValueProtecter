@@ -10,10 +10,10 @@ WORKDIR /usr/src/app
 
 COPY . /usr/src/app/
 
-RUN pip install --no-cache-dir -r /usr/src/app/requirements.txt
+RUN pip3 install --no-cache-dir -r /usr/src/app/requirements.txt
 
 EXPOSE 80/tcp
 
 VOLUME ["/usr/src/app"]
 
-CMD ["python", "./your-daemon-or-script.py"]
+CMD ["python3", "./CryptoBot.py"]

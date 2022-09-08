@@ -2,7 +2,10 @@
 Description=CryptoValueProtecter
 
 [Service]
-ExecStart=python CryptoBot.py
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=python3 CryptoBot.py
 
 [Install]
 WantedBy=multi-user.target
