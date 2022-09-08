@@ -76,7 +76,7 @@ Bring up the container by executing:
 ```
 docker-compose up -d
 ```
-#### Do it manually
+##### Do it manually
 Build the container.
 ```
 docker build -t cryptobot .
