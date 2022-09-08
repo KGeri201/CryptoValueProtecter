@@ -1,0 +1,13 @@
+version: '3.3'
+services:
+    cryptobot:
+        build: .
+        container_name: cryptobot
+        command: python3 ./CryptoBot.py
+        restart: always
+        ports:
+            - 80:80
+        volumes:
+            - "$PWD":/usr/src/app
+        working_dir: 
+            - /usr/src/app
