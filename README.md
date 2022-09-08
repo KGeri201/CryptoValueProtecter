@@ -51,7 +51,7 @@ sudo systemctl enable cryptobot.service
 #### Easy and fast
 Quick install with docker run, but without a webui.
 ```
-docker run -it --rm --name cryptobot -v "$PWD":/usr/src/app -w /usr/src/app python:latest python3 CryptoBot.py
+docker run -it --rm --name cryptobot -v "$PWD":/usr/src/app -w /usr/src/app python python3 CryptoBot.py
 ```
 #### Custom container
 ##### Use docker-compose
