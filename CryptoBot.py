@@ -27,7 +27,6 @@ currency = "EUR"
 time_to_wait = 24
 time_unit = "hour"
 
-sell_threshold = 0
 trade_threshold = 0
 
 doomsdaymeasures = False
@@ -77,26 +76,35 @@ def findBestPriceChangePercentage(client):
     return highest_ticker
 
 def trade(client, asset):
+    money = 0
     best_asset = findBestPriceChangePercentage(client)
-    if float(best_asset["priceChangePercent"]) < sell_threshold:
-        try:
-            #order = client.create_test_order(
-            #    symbol=asset["asset"]+currency,
-            #    side="SELL",
-            #    type="MARKET",
-            #    quantity=asset["free"])
-            #log(order, Type.INFO)
-            #order = client.create_test_order(
-            #    symbol=asset["asset"]+currency,
-            #    side="BUY",
-            #    type="MARKET",
-            #    quantity=asset["free"])
-            #log(order, Type.INFO)
-            pass
-        except Exception as e:
-            log(e, Type.ERROR)
-    else:
-        log(best_asset)
+    try:
+        if best_asset["priceChangePercent"] >= 0 or (doomsdaymeasures and best_asset["priceChangePercent"] < 0):
+            #Sell
+            order = client.create_test_order(
+                symbol=asset["asset"]+currency,
+                side="SELL",
+                type="MARKET",
+                quantity=asset["free"])
+            log(order, Type.INFO)
+            #Get balance
+            assets = getBalance(client.get_account())
+            for asset in assets:
+                if asset["asset"] == currency:
+                    money = asset["free"] - asset["locked"]
+            log("Balance after selling " + asset + ": " + getBalance(client.get_account()), Type.INFO)
+            if money > 0 and not doomsdaymeasures:
+                #Buy
+                price_of_best_asset = client.get_avg_price(symbol=best_asset["asset"]+currency)
+                order = client.create_test_order(
+                    symbol=best_asset["asset"]+currency,
+                    side="BUY",
+                    type="MARKET",
+                    quantity=100,
+                    price=price_of_best_asset)
+                log(order, Type.INFO)
+    except Exception as e:
+        log(e, Type.ERROR)
 
 def cryptobot():
     client = Client(api_key, api_secret)
@@ -124,13 +132,14 @@ def cryptobot():
         else:
             return
 
-def calculateTimeToSleep(time_unit):
-    if time_unit == "minute":
-        return time_to_wait * 60
-    elif time_unit == "hour":
-        return time_to_wait * 60 * 60
+def calculateTimeToSleep(time, unit):
+    if unit == "minute":
+        return time * 60
+    elif unit == "hour":
+        return time * 60 * 60
     else:
         log("Unit of time is not valid! Using default value.", Type.WARNING)
+        return time * 60 * 60
 
 #def website():
 #    pass
@@ -157,8 +166,6 @@ if __name__ == "__main__":
             time_to_wait = config["time_to_wait"]
         if "time_unit" in config.keys():
             time_unit = config["time_unit"]
-        if "sell_threshold" in config.keys():
-            sell_threshold = config["sell_threshold"]
         if "trade_threshold" in config.keys():
             trade_threshold = config["trade_threshold"]
         if "doomsdaymeasures" in config.keys():
@@ -185,7 +192,7 @@ if __name__ == "__main__":
     if error is not None:
         log(error, Type.WARNING)
 
-    time_to_wait = calculateTimeToSleep(time_unit)
+    time_to_wait = calculateTimeToSleep(time_to_wait, time_unit)
 
     # Website
     #try:

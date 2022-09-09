@@ -21,7 +21,6 @@ currency: "EUR"
 time_to_wait: 24
 time_unit: "hour"
 
-sell_threshold: 0
 trade_threshold: 0
 
 doomsdaymeasures: False
