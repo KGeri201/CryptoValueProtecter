@@ -2,9 +2,9 @@ FROM python:latest
 
 RUN apt-get update -y && apt-get upgrade -y
 
-RUN apt-get install nginx -y
+#RUN apt-get install nginx -y
 
-COPY index.html /var/www/html/
+#COPY index.html /var/www/html/
 
 WORKDIR /usr/src/app
 

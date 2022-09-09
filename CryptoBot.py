@@ -100,20 +100,23 @@ def cryptobot():
     #order = client.order_market_sell(
     #symbol='ETHEUR')
     #print(order)
-    assets = getBalance(client.get_account())
-    log("Balance was loaded.", Type.DEBUG)
-    for asset in assets:
-        #print(asset)
-        try:
-            ticker = client.get_ticker(symbol=(asset["asset"]+currency))
-            log("Price Change Percentage of " + (asset["asset"]+currency) + " = " + str(float(ticker["priceChangePercent"]))+" %", Type.DEBUG, False)
-            if float(ticker["priceChangePercent"]) < trade_threshold:
-                trade(client, asset)
-        except:
-            pass
-    if not debug:
-        for seconds in range(time_to_wait):
-            sleep(1)
+    while True:
+        assets = getBalance(client.get_account())
+        log("Balance was loaded.", Type.DEBUG)
+        for asset in assets:
+            #print(asset)
+            try:
+                ticker = client.get_ticker(symbol=(asset["asset"]+currency))
+                log("Price Change Percentage of " + (asset["asset"]+currency) + " = " + str(float(ticker["priceChangePercent"]))+" %", Type.DEBUG, False)
+                if float(ticker["priceChangePercent"]) < trade_threshold:
+                    trade(client, asset)
+            except:
+                pass
+        if not debug:
+            for seconds in range(time_to_wait):
+                sleep(1)
+        else:
+            return
 
 def calculateTimeToSleep(time_unit):
     if time_unit == "second":
