@@ -54,6 +54,9 @@ def log(msg, type=None, display=True):
     elif type is Type.EXCEPTION:
         logger.exception(msg)
 
+#def website():
+#    pass
+
 def getBalance(info, all_coins=None):
     balance = []
     for item in info["balances"]:
@@ -140,9 +143,6 @@ def calculateTimeToSleep(time, unit):
     else:
         log("Unit of time is not valid! Using default value.", Type.WARNING)
         return time * 60 * 60
-
-#def website():
-#    pass
 
 
 if __name__ == "__main__":
