@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from tkinter import FALSE
 import yaml
 import logging
 #import websockets
@@ -69,6 +68,12 @@ def getBalance(info, all_coins=None):
             balance.append(item)
     return balance
 
+def getMoney(balance):
+    for asset in balance:
+        if asset["asset"] == currency:
+            return asset["free"] - asset["locked"]
+    return None
+
 def findBestPriceChangePercentage(client):
     all_tickers = client.get_ticker()
     highest_ticker = all_tickers[0]
@@ -79,33 +84,31 @@ def findBestPriceChangePercentage(client):
     return highest_ticker
 
 def trade(client, asset):
-    money = 0
     best_asset = findBestPriceChangePercentage(client)
+    if best_asset["symbol"] == (asset["asset"] + currency):
+        return 
     try:
-        if best_asset["priceChangePercent"] >= 0 or (doomsdaymeasures and best_asset["priceChangePercent"] < 0):
-            #Sell
-            order = client.create_test_order(
-                symbol=asset["asset"]+currency,
-                side="SELL",
-                type="MARKET",
-                quantity=asset["free"])
+        #Sell
+        order = client.order_market_sell(
+            symbol=asset["asset"]+currency,
+            quantity=asset["free"])
+        log(order, Type.INFO)
+
+        # check for doomsdaymeasures - has to be implemented          
+        if False:
+            return
+        #Get balance of wallet
+        balance = getBalance(client.get_account())
+        log("Balance after selling " + asset + ": " + balance, Type.INFO)
+        money = getMoney(balance)
+        if money is not None and money > 0:
+            #Buy
+            price_of_best_asset = client.get_avg_price(symbol=best_asset["asset"]+currency)
+            order = client.order_limit_buy(
+                symbol=best_asset["asset"]+currency,
+                quantity=float(money/price_of_best_asset),
+                price=price_of_best_asset)
             log(order, Type.INFO)
-            #Get balance
-            assets = getBalance(client.get_account())
-            for asset in assets:
-                if asset["asset"] == currency:
-                    money = asset["free"] - asset["locked"]
-            log("Balance after selling " + asset + ": " + getBalance(client.get_account()), Type.INFO)
-            if money > 0 and not doomsdaymeasures:
-                #Buy
-                price_of_best_asset = client.get_avg_price(symbol=best_asset["asset"]+currency)
-                order = client.create_test_order(
-                    symbol=best_asset["asset"]+currency,
-                    side="BUY",
-                    type="MARKET",
-                    quantity=100,
-                    price=price_of_best_asset)
-                log(order, Type.INFO)
     except Exception as e:
         log(e, Type.ERROR)
 
@@ -121,7 +124,6 @@ def cryptobot():
         assets = getBalance(client.get_account())
         log("Balance was loaded.", Type.DEBUG)
         for asset in assets:
-            #print(asset)
             try:
                 ticker = client.get_ticker(symbol=(asset["asset"]+currency))
                 log("Price Change Percentage of " + (asset["asset"]+currency) + " = " + str(float(ticker["priceChangePercent"]))+" %", Type.DEBUG, False)
@@ -146,7 +148,7 @@ def calculateTimeToSleep(time, unit):
 
 
 if __name__ == "__main__":
-    # print project name
+    # Display project name
     print("   ___               _     __   __    _          ___         _          _           ")
     print("  / __|_ _ _  _ _ __| |_ __\ \ / /_ _| |_  _ ___| _ \_ _ ___| |_ ___ __| |_ ___ _ _ ")
     print(" | (__| '_| || | '_ \  _/ _ \ V / _` | | || / -_)  _/ '_/ _ \  _/ -_) _|  _/ -_) '_|")

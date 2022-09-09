@@ -25,7 +25,7 @@ trade_threshold: 0
 
 doomsdaymeasures: False
 
-start_website: False
+monitor = False
 
 logging_level: 2
 debug: False
