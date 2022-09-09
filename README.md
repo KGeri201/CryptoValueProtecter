@@ -19,7 +19,7 @@ api_secret: "<API_SECRET>"
 currency: "EUR"
 
 time_to_wait: 24
-time_unit: "second"
+time_unit: "hour"
 
 sell_threshold: 0
 trade_threshold: 0
@@ -28,7 +28,7 @@ doomsdaymeasures: False
 
 start_website: False
 
-logging_level: 3
+logging_level: 2
 debug: False
 ```
 Then choose one of the two methods:

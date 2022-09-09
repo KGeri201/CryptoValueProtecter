@@ -80,12 +80,18 @@ def trade(client, asset):
     best_asset = findBestPriceChangePercentage(client)
     if float(best_asset["priceChangePercent"]) < sell_threshold:
         try:
-            order = client.create_test_order(
-                symbol=asset["asset"]+currency,
-                side="SELL",
-                type="MARKET",
-                quantity=asset["free"])
-            log(order, Type.INFO)
+            #order = client.create_test_order(
+            #    symbol=asset["asset"]+currency,
+            #    side="SELL",
+            #    type="MARKET",
+            #    quantity=asset["free"])
+            #log(order, Type.INFO)
+            #order = client.create_test_order(
+            #    symbol=asset["asset"]+currency,
+            #    side="BUY",
+            #    type="MARKET",
+            #    quantity=asset["free"])
+            #log(order, Type.INFO)
             pass
         except Exception as e:
             log(e, Type.ERROR)
@@ -119,9 +125,7 @@ def cryptobot():
             return
 
 def calculateTimeToSleep(time_unit):
-    if time_unit == "second":
-        return time_to_wait * 1
-    elif time_unit == "minute":
+    if time_unit == "minute":
         return time_to_wait * 60
     elif time_unit == "hour":
         return time_to_wait * 60 * 60
@@ -165,7 +169,6 @@ if __name__ == "__main__":
             logging_level = config["logging_level"]
         if "debug" in config.keys():
             debug = config["debug"]
-        time_to_wait = calculateTimeToSleep(time_unit)
         #if debug:
         #    api_key = config["api_key_test"]
         #    api_secret = config["api_secret_test"]
@@ -181,6 +184,8 @@ if __name__ == "__main__":
 
     if error is not None:
         log(error, Type.WARNING)
+
+    time_to_wait = calculateTimeToSleep(time_unit)
 
     # Website
     #try:
