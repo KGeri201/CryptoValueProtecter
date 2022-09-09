@@ -4,7 +4,7 @@
 from tkinter import FALSE
 import yaml
 import logging
-import websockets
+#import websockets
 from enum import Enum
 from time import sleep
 from threading import Thread
@@ -128,8 +128,8 @@ def calculateTimeToSleep(time_unit):
     else:
         log("Unit of time is not valid! Using default value.", Type.WARNING)
 
-def website():
-    pass
+#def website():
+#    pass
 
 
 if __name__ == "__main__":
@@ -183,13 +183,13 @@ if __name__ == "__main__":
         log(error, Type.WARNING)
 
     # Website
-    try:
-        if monitor:
-            ws_thread = Thread(target=website)
-            ws_thread.start()
-            ws_thread.join()
-    except:
-        log("No websocket was started!", Type.WARNING)
+    #try:
+    #    if monitor:
+    #        ws_thread = Thread(target=website)
+    #        ws_thread.start()
+    #        ws_thread.join()
+    #except:
+    #    log("No websocket was started!", Type.WARNING)
 
     # CryptoBot
     try:
