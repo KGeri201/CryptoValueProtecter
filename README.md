@@ -10,8 +10,50 @@ when their price change percentage changes under a custom threshold.
 It will also have an easy to read web UI to easily monitor the bot from everywhere.
 
 ## Installation
-Clone/copy the project. 
-Create a file called config.yaml in the main directory of the project.
+### Bare metal
+Make sure you have wget installed to download and execute the setup script as sudo
+```
+wget https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/setup.sh | bash
+```
+It will install python3
+```
+apt-get install python3 -y
+```
+download all the needed files
+```
+wget https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/LICENSE
+wget https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/README.md
+wget https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/CryptoBot.py
+wget https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/requirements.txt
+wget -P /var/www/html/ https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/index.html
+wget -P /etc/systemd/system/ https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/cryptobot.service
+```
+and all the needed requirements.
+```
+pip3 install --no-cache-dir -r requirements.txt
+```
+It will also add the path of the bot into the service file.
+```
+sed -i "s|path|$PWD|g" /etc/systemd/system/cryptobot.service
+```
+### Docker
+#### Easy and fast
+Clone/download the project onto your local machine.
+Quick install with docker run:
+```
+docker run -it --rm --name cryptobot -v "$PWD":/usr/src/app -w /usr/src/app python python3 CryptoBot.py
+```
+#### Custom container
+For that it is enough to download the Dockerfile and optionally the docker-compose.yaml, if you want to use docker-compose.
+```
+wget https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/Dockerfile
+```
+```
+wget https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/docker-compose.yaml
+```
+
+## Usage
+Create a file called config.yaml in and place it inside the working directory of your container or right next to the CryptoBot.py.
 ```
 api_key: "<API_KEY>"
 api_secret: "<API_SECRET>"
@@ -30,33 +72,7 @@ monitor = False
 logging_level: 2
 debug: False
 ```
-Then choose one of the two methods:
-### Bare metal
-Go into the main directory of the project and execute the setup script
-```
-.\setup.sh
-```
-It will install python3 and all the needed requirements.
-```
-sudo apt-get install python3 -y
-```
-```
-pip3 install --no-cache-dir -r requirements.txt
-```
-It will copy the index.html to the /var/www/html/ folder and replace the default html file.
-```
-sudo cp index.html /var/www/html/
-```
-Adds the path of the bot into the service file
-```
-sed -i "s|CryptoBot.py|$PWD/CryptoBot.py|g" cryptobot.service
-```
-and copies it.
-```
-sudo cp cryptobot.service /etc/systemd/system/
-```
-#### Start
-Start the service
+### Start it as a service
 ```
 sudo systemctl start cryptobot.service
 ```
@@ -68,15 +84,9 @@ The service file also can be enabled to automatically start by booting the compu
 ```
 sudo systemctl enable cryptobot.service
 ```
-### Docker
-#### Easy and fast
-Quick install with docker run:
-```
-docker run -it --rm --name cryptobot -v "$PWD":/usr/src/app -w /usr/src/app python python3 CryptoBot.py
-```
-#### Custom container
-##### Use docker-compose
-docker-compose.yaml in the main directory of the project:
+### Start it as a container
+#### Use docker-compose
+docker-compose.yaml:
 ```
 version: '3.3'
 services:
@@ -93,14 +103,14 @@ Start the container by executing:
 ```
 docker-compose up -d
 ```
-##### Do it manually
+#### Build it manually
 Build the container.
 ```
 docker build -t cryptobot .
 ```
 Start the container.
 ```
-docker run -it --rm --name cryptobot cryptobot
+docker run -it --rm --name -v $PWD:/usr/src/app cryptobot cryptobot
 ```
 
 ## Credits
