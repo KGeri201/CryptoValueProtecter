@@ -36,9 +36,9 @@ Go into the main directory of the project and execute the setup script
 ```
 .\setup.sh
 ```
-It will install python3, nginx and all the needed requirements.
+It will install python3 and all the needed requirements.
 ```
-sudo apt-get install python3 nginx -y
+sudo apt-get install python3 -y
 ```
 ```
 pip3 install --no-cache-dir -r requirements.txt

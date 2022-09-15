@@ -2,15 +2,11 @@ FROM python:latest
 
 RUN apt-get update -y && apt-get upgrade -y
 
-#RUN apt-get install nginx -y
-
-#COPY index.html /var/www/html/
+RUN apt-get install wget -y
 
 WORKDIR /usr/src/app
 
-COPY . /usr/src/app/
-
-RUN pip3 install --no-cache-dir -r /usr/src/app/requirements.txt
+RUN wget -P /usr/src/app/ https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/setup.sh | bash
 
 EXPOSE 80/tcp
 
