@@ -38,6 +38,9 @@ debug = False
 error = None
 
 def log(msg, type=None, display=True):
+    """
+    Logs and prints the given text.
+    """
     if display:
         print(msg)
     if type is Type.DEBUG:
@@ -56,9 +59,13 @@ def log(msg, type=None, display=True):
 #def website():
 #    pass
 
-def getBalance(info, all_coins=None):
+def getBalance(all_coins=None):
+    """
+    Gets the balance of the binance account.
+    """
     balance = []
-    for item in info["balances"]:
+    account = client.get_account()
+    for item in account["balances"]:
         if float(item["free"]) > 0 and float(item["free"]) > float(item["locked"]):
             #if all_coins is not None:
             #    item.update({"value": None})
@@ -69,13 +76,18 @@ def getBalance(info, all_coins=None):
     return balance
 
 def getMoney(balance):
+    """
+    Gets the amount of currency on the account.
+    """
     for asset in balance:
         if asset["asset"] == currency:
             return asset["free"] - asset["locked"]
     return None
 
-def findBestPriceChangePercentage(client):
-    all_tickers = client.get_ticker()
+def findBestPriceChangePercentage(all_tickers):
+    """
+    Finds the asset with the highest price change percentage.
+    """
     highest_ticker = all_tickers[0]
     for ticker in all_tickers:
         if ticker["symbol"].find(currency) != -1:
@@ -83,11 +95,14 @@ def findBestPriceChangePercentage(client):
                 highest_ticker = ticker
     return highest_ticker
 
-def convert(client, asset):
+def convert(asset):
     pass
 
-def sellAndBuy(client, asset):
-    best_asset = findBestPriceChangePercentage(client)
+def sellAndBuy(asset):
+    """
+    Sells the given asset and buys the asset with the highest price change percentage.
+    """
+    best_asset = findBestPriceChangePercentage(client.get_ticker())
     if best_asset["symbol"] == (asset["asset"] + currency):
         return 
     try:
@@ -101,7 +116,7 @@ def sellAndBuy(client, asset):
         if False:
             return
         #Get balance of wallet
-        balance = getBalance(client.get_account())
+        balance = getBalance()
         log("Balance after selling " + asset + ": " + balance, Type.INFO)
         money = getMoney(balance)
         if money is not None and money > 0:
@@ -115,37 +130,42 @@ def sellAndBuy(client, asset):
     except Exception as e:
         log(e, Type.ERROR)
 
-def cryptobot():
-    client = Client(api_key, api_secret)
+def timeToTrade(asset):
+    """
+    Determines if the price change percentage of an asset is below the trade threshold.
+    """
+    #ticker = client.get_ticker(symbol=(asset["asset"]+currency))
+    #log("Price Change Percentage of " + (asset["asset"]+currency) + " = " + str(float(ticker["priceChangePercent"]))+" %", Type.DEBUG, False)
+    #if float(ticker["priceChangePercent"]) < trade_threshold:
+        #return True
+    return False
+
+def main():
     log("CryptoBot was successfuly started", Type.INFO)
-    #if debug:
-    #    client = Client(api_key, api_secret, testnet=True)
     #order = client.order_market_sell(
     #symbol='ETHEUR')
     #print(order)
     #print(client.get_exchange_info())
-
     while True:
-        assets = getBalance(client.get_account())
+        assets = getBalance()
         log("Balance was loaded.", Type.DEBUG)
         for asset in assets:
             try:
-                pass
-                #ticker = client.get_ticker(symbol=(asset["asset"]+currency))
-                #log("Price Change Percentage of " + (asset["asset"]+currency) + " = " + str(float(ticker["priceChangePercent"]))+" %", Type.DEBUG, False)
-                #if float(ticker["priceChangePercent"]) < trade_threshold:
-                    #sellAndBuy(client, asset)
-                #    convert(client, asset)
+                if timeToTrade(asset):
+                    #sellAndBuy(asset)
+                    convert(asset)
             except:
                 pass
         
         if debug:
             return
         for seconds in range(time_to_wait):
-            sleep(1)
-            
+            sleep(1)    
 
 def calculateTimeToSleep(time, unit):
+    """
+    Calculates the sleep time in seconds.
+    """
     if unit == "minute":
         return time * 60
     elif unit == "hour":
@@ -217,7 +237,11 @@ if __name__ == "__main__":
     try:
         if (api_key is None or api_secret is None) :
             raise Exception("api_key or api_secret is not set")
-        cryptobot()
+        client = Client(api_key, api_secret)
+        #if debug:
+        #    client = Client(api_key, api_secret, testnet=True)
+        log("Client was successfully initialised", Type.DEBUG)
+        main()
     except KeyboardInterrupt:
         log("Keyboardinterrupt detected", Type.WARNING)
     except Exception as e:
