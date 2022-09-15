@@ -83,7 +83,10 @@ def findBestPriceChangePercentage(client):
                 highest_ticker = ticker
     return highest_ticker
 
-def trade(client, asset):
+def convert(client, asset):
+    pass
+
+def sellAndBuy(client, asset):
     best_asset = findBestPriceChangePercentage(client)
     if best_asset["symbol"] == (asset["asset"] + currency):
         return 
@@ -120,22 +123,27 @@ def cryptobot():
     #order = client.order_market_sell(
     #symbol='ETHEUR')
     #print(order)
+    #print(client.get_exchange_info())
+
     while True:
         assets = getBalance(client.get_account())
         log("Balance was loaded.", Type.DEBUG)
         for asset in assets:
             try:
-                ticker = client.get_ticker(symbol=(asset["asset"]+currency))
-                log("Price Change Percentage of " + (asset["asset"]+currency) + " = " + str(float(ticker["priceChangePercent"]))+" %", Type.DEBUG, False)
-                if float(ticker["priceChangePercent"]) < trade_threshold:
-                    trade(client, asset)
+                pass
+                #ticker = client.get_ticker(symbol=(asset["asset"]+currency))
+                #log("Price Change Percentage of " + (asset["asset"]+currency) + " = " + str(float(ticker["priceChangePercent"]))+" %", Type.DEBUG, False)
+                #if float(ticker["priceChangePercent"]) < trade_threshold:
+                    #sellAndBuy(client, asset)
+                #    convert(client, asset)
             except:
                 pass
-        if not debug:
-            for seconds in range(time_to_wait):
-                sleep(1)
-        else:
+        
+        if debug:
             return
+        for seconds in range(time_to_wait):
+            sleep(1)
+            
 
 def calculateTimeToSleep(time, unit):
     if unit == "minute":

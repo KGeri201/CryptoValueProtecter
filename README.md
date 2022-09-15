@@ -21,8 +21,6 @@ apt-get install python3 -y
 ```
 download all the needed files
 ```
-wget https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/LICENSE
-wget https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/README.md
 wget https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/CryptoBot.py
 wget https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/requirements.txt
 wget -P /var/www/html/ https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/index.html
@@ -39,11 +37,12 @@ pip3 install --no-cache-dir -r requirements.txt
 
 ### Docker
 #### Easy and fast
-Clone/download the project onto your local machine.
-Quick install with docker run:
+Quick install with docker run:  
+Clone/download the project onto your local machine and execute
 ```
 docker run -it --rm --name cryptobot -v "$PWD":/usr/src/app -w /usr/src/app python python3 CryptoBot.py
 ```
+You will also have to create the config.yaml as described under "Usage" and install all the needed python library requirements
 #### Custom container
 For that it is enough to download the Dockerfile and optionally the docker-compose.yaml, if you want to use docker-compose.
 ```
