@@ -28,14 +28,15 @@ wget https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/requir
 wget -P /var/www/html/ https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/index.html
 wget -P /etc/systemd/system/ https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/cryptobot.service
 ```
-and all the needed requirements.
-```
-pip3 install --no-cache-dir -r requirements.txt
-```
-It will also add the path of the bot into the service file.
+and add the path of the bot into the service file.
 ```
 sed -i "s|path|$PWD|g" /etc/systemd/system/cryptobot.service
 ```
+It wills also install all the needed python requirements.
+```
+pip3 install --no-cache-dir -r requirements.txt
+```
+
 ### Docker
 #### Easy and fast
 Clone/download the project onto your local machine.
