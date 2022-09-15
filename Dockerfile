@@ -6,7 +6,7 @@ RUN apt-get install wget -y
 
 WORKDIR /usr/src/app
 
-RUN wget -P /usr/src/app/ https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/setup.sh | bash
+RUN wget https://raw.githubusercontent.com/KGeri201/CryptoValueProtecter/main/setup.sh | bash
 
 EXPOSE 80/tcp
 
