@@ -110,7 +110,7 @@ docker build -t cryptobot .
 ```
 Start the container.
 ```
-docker run -it --rm --name -v $PWD:/usr/src/app cryptobot cryptobot
+docker run -it --rm --name cryptobot -v $PWD:/usr/src/app cryptobot cryptobot
 ```
 
 ## Credits
