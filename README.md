@@ -117,7 +117,7 @@ docker run -it --rm --name cryptobot -v $PWD:/usr/src/app cryptobot
 [KGeri201](https://github.com/KGeri201)
 
 ## License
-[GNU GENERAL PUBLIC LICENSE](LICENSE)
+[Apache License 2.0](LICENSE)
 
 ## Project status
 In development.
