@@ -6,7 +6,7 @@
 ## Description
 It is a bot written in python, which monitors your binance crypto wallet in custom intervalls
 and automatically trades your crypto currencies and tokens 
-when their price change percentage changes under a custom threshold.  
+when their price change percentage changes is under a custom threshold.  
 It will also have an easy to read web UI to easily monitor the bot from everywhere.
 
 ## Installation
