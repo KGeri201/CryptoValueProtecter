@@ -9,6 +9,10 @@ and automatically trades your crypto currencies and tokens
 when their price change percentage changes is under a custom threshold.  
 It will also have an easy to read web UI to easily monitor the bot from everywhere.
 
+> **Warning**
+> This project is not tested properly, and there is no guaranty for it to work.  
+> Use it at your own risk and discretion.
+
 ## Installation
 ### Bare metal
 Make sure you have wget installed to download and execute the setup script as sudo
